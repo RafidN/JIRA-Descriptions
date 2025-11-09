@@ -1,0 +1,41 @@
+:root{
+  --bg:#f5f6f8; --card:#fff; --text:#1f2d3d; --muted:#6b778c;
+  --border:#e6e8ee; --primary:#0052cc; --primary-ink:#fff; --accent:#deebff;
+  --success:#e3fcef; --error:#ffebe6; --error-text:#bf2600;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.topbar{height:52px;display:flex;align-items:center;gap:16px;padding:0 16px;background:#091e42;color:#fff}
+.topbar .brand{font-weight:700;letter-spacing:.5px}
+.topbar .crumbs{opacity:.85}
+.container{max-width:980px;margin:24px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 2px 6px rgba(9,30,66,.04)}
+h1,h2,h3{margin:8px 0 16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.span-2{grid-column:span 2}
+label{font-size:12px;color:var(--muted)}
+.req{color:#de350b}
+input,select,textarea{padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px}
+textarea{resize:vertical}
+.desc-header{display:flex;align-items:center;justify-content:space-between}
+.desc-actions{display:flex;gap:8px}
+.btn{border:1px solid var(--border);background:#f7f8fa;border-radius:8px;padding:8px 12px;cursor:pointer}
+.btn:hover{background:#eef1f6}
+.btn.primary{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
+.btn.primary:hover{filter:brightness(0.98)}
+.btn.subtle{background:transparent}
+.actions{display:flex;gap:8px;align-items:center}
+.loading{display:flex;align-items:center;gap:10px;background:var(--accent);border:1px solid #b3d4ff;padding:10px;border-radius:8px;margin-top:10px}
+.hidden{display:none}
+.spinner{width:18px;height:18px;border:3px solid #b3d4ff;border-top-color:#0052cc;border-radius:50%;animation:spin 0.9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{margin-top:8px;background:var(--error);color:var(--error-text);padding:10px;border-radius:8px;border:1px solid #ffbdad}
+.footer{max-width:980px;margin:16px auto;padding:0 16px;color:var(--muted);font-size:12px}
+.issue-header{display:flex;justify-content:space-between;align-items:center}
+.issue-key{font-size:12px;color:var(--muted)}
+.meta{color:var(--muted);font-size:12px;margin-top:4px}
+.badge{display:inline-block;background:#ebecf0;border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:12px}
+.dot{padding:0 6px;color:#C1C7D0}
+.markdown{background:#fcfcff;border:1px dashed var(--border);border-radius:8px;padding:14px;white-space:pre-wrap;line-height:1.45}
+.details{margin-top:16px}

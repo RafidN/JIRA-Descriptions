@@ -1,11 +1,159 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+  <meta charset="utf-8" />
+  <title>Create Issue – Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Try loading marked from unpkg first -->
+  <script src="https://unpkg.com/marked/marked.min.js" defer></script>
+  <!-- Hard fallback to jsDelivr if unpkg fails -->
+  <script>
+    // If marked isn't defined shortly after DOMInteractive, inject a backup script
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        if (!window.marked) {
+          const s = document.createElement("script");
+          s.src = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+          s.defer = true;
+          s.onload = () => console.log("[markdown] loaded from jsDelivr");
+          s.onerror = () => console.warn("[markdown] failed to load from both CDNs; using basic fallback");
+          document.head.appendChild(s);
+        }
+      }, 50);
+    });
+  </script>
 </head>
 <body>
-    Hello World
+  <header class="topbar">
+    <div class="brand">JIRA</div>
+    <div class="crumbs">Projects / Whizzard / Create</div>
+  </header>
+
+  <main class="container">
+    <section id="create-issue-card" class="card">
+      <h1>Create issue</h1>
+
+      <form id="ticketForm" class="form-grid" novalidate>
+        <!-- Row 1 -->
+        <div class="field">
+          <label>Project</label>
+          <select id="project" required>
+            <option>Whizzard</option>
+            <option>Demo Project</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Issue type</label>
+          <select id="issueType" required>
+            <option>Task</option>
+            <option>Story</option>
+            <option>Bug</option>
+          </select>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="field span-2">
+          <label>Summary <span class="req">*</span></label>
+          <input id="summary" type="text" placeholder="e.g. Add /healthz endpoint with 200 OK JSON" required />
+        </div>
+
+        <!-- Row 3 -->
+        <div class="field span-2">
+          <div class="desc-header">
+            <label>Description</label>
+            <div class="desc-actions">
+              <button type="button" id="generateBtn" class="btn subtle">Generate Developer Action Items</button>
+            </div>
+          </div>
+          <textarea id="description" rows="10" placeholder="Add details, steps to reproduce, acceptance criteria…"></textarea>
+
+          <!-- Loading state -->
+          <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <div>
+              Generating with repo embeddings… <span id="loadingPhase">cloning</span>
+            </div>
+          </div>
+
+          <!-- Error state -->
+          <div id="error" class="error hidden"></div>
+        </div>
+
+        <!-- Row 4: Repo + Params -->
+        <div class="field">
+          <label>GitHub Repo URL <span class="req">*</span></label>
+          <input id="repoUrl" type="url" placeholder="https://github.com/user/repo" required />
+        </div>
+
+        <div class="field">
+          <label>Max context chunks</label>
+          <input id="maxK" type="number" min="3" max="40" value="12" />
+        </div>
+
+        <div class="field">
+          <label>Chunk size</label>
+          <input id="chunkSize" type="number" min="300" max="4000" value="1200" />
+        </div>
+
+        <div class="field">
+          <label>Overlap</label>
+          <input id="overlap" type="number" min="0" max="1000" value="150" />
+        </div>
+
+        <!-- Row 5 -->
+        <div class="field">
+          <label>Assignee</label>
+          <input id="assignee" type="text" placeholder="Unassigned" />
+        </div>
+
+        <div class="field">
+          <label>Priority</label>
+          <select id="priority">
+            <option>Medium</option>
+            <option>High</option>
+            <option>Low</option>
+          </select>
+        </div>
+
+        <div class="field span-2 actions">
+          <button id="createBtn" type="submit" class="btn primary">Create</button>
+          <button type="button" id="cancelBtn" class="btn">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Issue view after "Create" -->
+    <section id="issue-view" class="card hidden">
+      <div class="issue-header">
+        <div>
+          <div class="issue-key">WHIZ-101</div>
+          <h2 id="issueTitle">—</h2>
+          <div class="meta">
+            <span id="issueTypeBadge" class="badge">Task</span>
+            <span class="dot">•</span>
+            <span id="priorityText">Medium</span>
+            <span class="dot">•</span>
+            <span id="assigneeText">Unassigned</span>
+          </div>
+        </div>
+        <button id="backBtn" class="btn subtle">← Back to Create</button>
+      </div>
+
+      <h3>Description</h3>
+      <div id="rendered" class="markdown"></div>
+
+      <details class="details">
+        <summary>Debug info</summary>
+        <pre id="debug"></pre>
+      </details>
+    </section>
+  </main>
+
+  <footer class="footer">Hackathon Demo • Generated by your FastAPI backend</footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
