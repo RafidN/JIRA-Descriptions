@@ -5,4 +5,3 @@ google-generativeai
 pydantic
 python-multipart
 python-dotenv
-faiss-cpu
