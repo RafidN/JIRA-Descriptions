@@ -41,6 +41,10 @@ uvicorn app:app --reload
 ```
 JIRA-Descriptions/
 ├─ app.py                # FastAPI app with endpoints
+└─ python_scripts/
+   ├─ clonegit.py        # Clones the repository link provided in JSON Request
+   ├─ embed.py           # Turns repository into vector embeddings for RAG search
+   └─ geminicall.js      # Builds prompt, and calls gemini for response
 ├─ requirements.txt
 ├─ README.md
 └─ frontend/
