@@ -29,16 +29,41 @@ def check_repos(url:str) -> Path:
     try:
         if url in local_repos:
             if local_path.exists():
-                logger.info(f"{url} already cloned. Pulling latest changes in {local_path}")
-                repo = Repo(local_path)
-                repo.remotes.origin.pull()
+                # Check if it's a valid git repository
+                try:
+                    repo = Repo(local_path)
+                    logger.info(f"{url} already cloned. Pulling latest changes in {local_path}")
+                    repo.remotes.origin.pull()
+                except Exception:
+                    # Not a valid git repo, remove and clone fresh
+                    logger.warning(f"{local_path} exists but is not a valid git repo. Removing and cloning fresh.")
+                    shutil.rmtree(local_path, ignore_errors=True)
+                    Repo.clone_from(url, local_path, depth=1)
             else:
                 logger.info(f"{url} is in repos.txt, but directory missing. Cloning into {local_path}")
                 Repo.clone_from(url, local_path, depth=1)
         else:
-            logger.info(f"{url} is not in repos.txt. Cloning into {local_path}")
-            Repo.clone_from(url, local_path, depth=1)
-            append_repo(url)
+            # URL not in repos.txt
+            if local_path.exists():
+                # Check if it's a valid git repository
+                try:
+                    repo = Repo(local_path)
+                    logger.info(f"{url} directory exists and is a valid git repo. Using existing clone at {local_path}")
+                    # Optionally pull latest changes
+                    try:
+                        repo.remotes.origin.pull()
+                    except Exception as pull_err:
+                        logger.warning(f"Failed to pull latest changes: {pull_err}. Using existing state.")
+                except Exception:
+                    # Not a valid git repo, remove and clone fresh
+                    logger.warning(f"{local_path} exists but is not a valid git repo. Removing and cloning fresh.")
+                    shutil.rmtree(local_path, ignore_errors=True)
+                    Repo.clone_from(url, local_path, depth=1)
+                    append_repo(url)
+            else:
+                logger.info(f"{url} is not in repos.txt. Cloning into {local_path}")
+                Repo.clone_from(url, local_path, depth=1)
+                append_repo(url)
     except GitCommandError as e:
         logger.exception(f"Git operation failed for {url}")
         raise HTTPException(status_code=400, detail=f"Failed to clone or pull repo: {e}")

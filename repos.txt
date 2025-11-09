@@ -1,0 +1,2 @@
+https://github.com/RafidN/Whizzard
+https://github.com/mattsiaco/ML_Project_Speech-Emotion-Recognition/
