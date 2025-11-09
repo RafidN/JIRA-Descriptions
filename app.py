@@ -15,7 +15,8 @@ try:
 except Exception:
     pass
 
-from python_scripts.clonegit import shallow_clone, cleanup_repo
+#from python_scripts.clonegit import shallow_clone, cleanup_repo
+from python_scripts.clonegit import check_repos
 from python_scripts.embed import build_context_for_ticket
 from python_scripts.geminicall import call_gemini
 
@@ -58,7 +59,8 @@ def action_items(body: ActionItemsRequest):
     t0 = time.time()
     logger.info(f"[{req_id}] START repo_url={body.repo_url} jira_title='{body.jira_title}' "
                 f"max_k={body.max_context_chunks} chunk_size={body.chunk_size} overlap={body.overlap}")
-    repo_dir = shallow_clone(body.repo_url)
+    #repo_dir = shallow_clone(body.repo_url)
+    repo_dir = check_repos(body.repo_url)
     logger.info(f"[{req_id}] cloned -> {repo_dir}")
     try:
         t_ctx = time.time()
@@ -92,8 +94,8 @@ def action_items(body: ActionItemsRequest):
         logger.exception(f"[{req_id}] Unhandled exception")
         raise
     finally:
-        logger.info(f"[{req_id}] cleanup repo {repo_dir}")
-        cleanup_repo(repo_dir)
+        #logger.info(f"[{req_id}] cleanup repo {repo_dir}")
+        #cleanup_repo(repo_dir)
         logger.info(f"[{req_id}] TOTAL elapsed={time.time()-t0:.2f}s")
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
