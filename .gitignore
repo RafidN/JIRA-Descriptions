@@ -3,4 +3,4 @@ __pycache__
 .env
 .DS_Store
 .embeddings_cache
-/cloned
+cloned/
